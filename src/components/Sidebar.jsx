@@ -1,8 +1,5 @@
-import question from "../assets/question.png";
-
 import { HiUserGroup } from "react-icons/hi";
 import { BiSolidHome } from "react-icons/bi";
-import { HiOutlineClipboardList } from "react-icons/hi";
 import { HiOutlineLogout } from "react-icons/hi";
 import { TbDatabaseCog } from "react-icons/tb";
 import { BsDatabaseFillCheck } from "react-icons/bs";
@@ -36,10 +33,10 @@ export function Sidebar() {
             }`}
           />
         </a>
-        <a href="/">
+        <a href="/history">
           <BsDatabaseFillCheck
             className={`w-[24px] h-[24px] hover:text-white ${
-              path.pathname == "/" ? "text-white" : "text-zinc-400"
+              path.pathname == "/history" ? "text-white" : "text-zinc-400"
             }`}
           />
         </a>

@@ -73,7 +73,13 @@ export default function Dashboard() {
 
   const rejectRequest = dataWdFromDb.filter((item) => item.status === "reject");
 
-  const totalWithdraw = dataWdFromDb.reduce(
+  const processRequest = dataWdFromDb.filter(
+    (item) => item.status != "reject" && item.status != "pulled"
+  );
+
+  const todayRequest = dataWdFromDb.filter((item) => item.status != "pulled");
+
+  const totalWithdraw = processRequest.reduce(
     (total, item) => total + item.nominal,
     0
   );
@@ -89,7 +95,7 @@ export default function Dashboard() {
         <Sidebar />
         <Widget
           pendingRequest={pendingRequest}
-          dataWdFromDb={dataWdFromDb}
+          todayRequest={todayRequest}
           rejectRequest={rejectRequest}
           totalWithdraw={totalWithdraw}
         />
@@ -109,9 +115,9 @@ export default function Dashboard() {
 
 const Widget = ({
   pendingRequest,
-  dataWdFromDb,
   rejectRequest,
   totalWithdraw,
+  todayRequest,
 }) => {
   const [copiedTextStyle, setCopiedTextStyle] = useState(
     "opacity-5 scale-0 -top-0"
@@ -134,17 +140,18 @@ const Widget = ({
   return (
     <>
       <div className="w-full flex justify-end gap-8">
-        <a href="/data-process" className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl">
-          <div
-            className="flex justify-between px-6 items-center"
-          >
+        <a
+          href="/data-process"
+          className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl"
+        >
+          <div className="flex justify-between px-6 items-center">
             <div className="text-[14px] kanit-regular">TODAY REQUEST</div>
             <div>
               <MdToday className="w-[24px] h-[24px]" />
             </div>
           </div>
           <div className="font-extrabold text-[40px] px-6">
-            {dataWdFromDb.length}
+            {todayRequest.length}
           </div>
           <hr className="w-full bg-[#DDDBE2] mt-3" />
           <div className="w-[188px] h-[7px] rounded-[31px] bg-[#C8C0DF] mx-auto mt-4">

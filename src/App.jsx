@@ -3,6 +3,7 @@ import Dashboard from "./components/Dashboard";
 import Account from "./components/Account";
 import Login from "./components/Login";
 import DataProcess from "./components/DataProcess";
+import History from "./components/History";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/data-process" element={<DataProcess />} />
+            <Route path="/history" element={<History />} />
             <Route path="/account" element={<Account />} />
           </Routes>
         </Router>

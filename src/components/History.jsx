@@ -13,7 +13,7 @@ import { FaSort } from "react-icons/fa6";
 import { TbListDetails } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 
-export default function DataProcess() {
+export default function History() {
   const [dataDetails, setDataDetails] = useState(false);
   const [idDetail, setIdDetail] = useState();
   const [loading, setLoading] = useState(false);
@@ -102,7 +102,7 @@ export default function DataProcess() {
       <div className="relative bg-white w-full max-w-[90%]  min-h-96 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
         <Header fullname={fullname} agentName={agentName} />
         <Sidebar />
-        <div>
+        <div className="hidden">
           <Data
             setDataDetails={setDataDetails}
             setIdDetail={setIdDetail}
@@ -356,19 +356,19 @@ const Data = ({
             <div className="flex-1 flex justify-start px-2 items-center">
               <span className="text-sm kanit-medium">{today}</span>
             </div>
-            <div className="flex flex-col md:flex-row px-2 py-1 justify-between items-center gap-2">
+            <div className="flex px-2 py-1 justify-between items-center gap-2">
               <div className="flex-1">
                 <input
                   type="text"
                   placeholder="Cari..."
-                  className="border p-1 rounded-md outline-none w-full max-w-80 min-w-52"
+                  className="border p-1 rounded-md outline-none w-full"
                   value={searchTerm}
                   onChange={(e) => {
                     setSearchTerm(e.target.value);
                   }}
                 />
               </div>
-              <div className="flex flex-col md:flex-row flex-wrap w-full gap-2 p-1 rounded-md border flex-1 justify-center">
+              <div className="flex gap-2 p-1 rounded-md border flex-1 justify-center">
                 <button
                   className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-blue-300"
                   onClick={() => handleFilterByStatus("all")}
@@ -382,10 +382,10 @@ const Data = ({
                   Success
                 </button>
                 <button
-                  className="w-24 flex justify-center items-center border p-1 rounded-md shadow-md bg-yellow-300"
+                  className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-yellow-300"
                   onClick={() => handleFilterByStatus("grab")}
                 >
-                  OnProcess
+                  Process
                 </button>
                 <button
                   className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-orange-300"
@@ -678,7 +678,7 @@ const DataDetails = ({
             <div className="flex-1 px-2">{fullname}</div>
           </div>
           <div className="min-w-96 flex px-2 border-b">
-            <div className="flex-1 px-2 border-r">Username Member</div>
+            <div className="flex-1 px-2 border-r">Username member</div>
             <div className="flex-1 px-2">{dataCheck.member_username}</div>
           </div>
           <div className="min-w-96 flex px-2 border-b">

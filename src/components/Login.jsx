@@ -11,7 +11,7 @@ import { GoEyeClosed, GoEye } from "react-icons/go";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
-export default function Dashboard() {
+export default function Login() {
   const apiUrl = import.meta.env.VITE_API_URL;
   return (
     <>
