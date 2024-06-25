@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Axios from "axios";
-
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "./Header";
 import { Sidebar } from "./Sidebar";
 import Loading from "./Loading";
 
-import { FaUndoAlt } from "react-icons/fa";
 import {
   TbPlayerTrackNextFilled,
   TbPlayerTrackPrevFilled,
 } from "react-icons/tb";
+import { GiConfirmed, GiCancel } from "react-icons/gi";
+import { PiHandCoinsFill } from "react-icons/pi";
+import { BiLoaderCircle } from "react-icons/bi";
 import { FaSort } from "react-icons/fa6";
 import { TbListDetails } from "react-icons/tb";
-import { PiCopySimpleDuotone } from "react-icons/pi";
 
-export default function DataProcess() {
+export default function HistoryDetails() {
+  const closedId = useParams();
   const [dataDetails, setDataDetails] = useState(false);
   const [idDetail, setIdDetail] = useState();
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ export default function DataProcess() {
 
   const [fullname, setFullname] = useState("");
 
-  const [dataWdFromDb, setDataWdFromDb] = useState([]);
+  const [dataHistoryDetails, setDataHistoryDetails] = useState([]);
   const [agentName, setAgentName] = useState("");
 
   useEffect(() => {
@@ -36,34 +37,19 @@ export default function DataProcess() {
     }
   }, []);
 
-  const getDataWdFromDb = async (id) => {
+  const getDataWdHistory = async (agen) => {
+    setLoading(true);
     try {
-      const response = await Axios.get(`${apiUrl}/operator/datawd/${id}`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const response = await Axios.get(
+        `${apiUrl}/op/history/${closedId.id}/${agen}`
+      );
       if (response.data.success) {
-        setDataWdFromDb(response.data.result);
+        setDataHistoryDetails(response.data.result);
       } else if (response.data.error) {
         console.log(response.data.error);
       } else {
         console.log("Failed to get data wd from db");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getOperatorAgentData = async () => {
-    setLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      const response = await Axios.get(`${apiUrl}/operator/agent/${userLogin}`);
-      if (response.data.success) {
-        setFullname(response.data.result[0].fullname);
-        getDataWdFromDb(response.data.result[0].agent_id);
-        setAgentName(response.data.result[0].name);
-      } else if (response.data.error) {
-        console.log(response.data.error);
-      } else {
-        console.log("Failed to get operator agent data");
       }
 
       setLoading(false);
@@ -72,8 +58,26 @@ export default function DataProcess() {
     }
   };
 
+  const getOperatorData = async () => {
+    setLoading(true);
+    try {
+      const response = await Axios.get(`${apiUrl}/operator/agent/${userLogin}`);
+      if (response.data.success) {
+        setFullname(response.data.result[0].fullname);
+        setAgentName(response.data.result[0].name);
+        getDataWdHistory(response.data.result[0].agent_id);
+      } else if (response.data.error) {
+        console.log(response.data.error);
+      } else {
+        console.log("Failed to get operator agent data");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getOperatorAgentData();
+    getOperatorData();
   }, []);
 
   useEffect(() => {
@@ -108,11 +112,13 @@ export default function DataProcess() {
           <Data
             setDataDetails={setDataDetails}
             setIdDetail={setIdDetail}
-            dataWdFromDb={dataWdFromDb}
+            dataHistoryDetails={dataHistoryDetails}
             loading={loading}
             rupiah={rupiah}
             apiUrl={apiUrl}
-            getOperatorAgentData={getOperatorAgentData}
+            getOperatorData={getOperatorData}
+            getDataWdHistory={getDataWdHistory}
+            userLogin={userLogin}
           />
         </div>
       </div>
@@ -123,7 +129,7 @@ export default function DataProcess() {
       >
         <DataDetails
           setDataDetails={setDataDetails}
-          dataWdFromDb={dataWdFromDb}
+          dataHistoryDetails={dataHistoryDetails}
           idDetail={idDetail}
           rupiah={rupiah}
           fullname={fullname}
@@ -136,11 +142,12 @@ export default function DataProcess() {
 const Data = ({
   setDataDetails,
   setIdDetail,
-  dataWdFromDb,
+  dataHistoryDetails,
   loading,
   rupiah,
   apiUrl,
-  getOperatorAgentData,
+  getDataWdHistory,
+  userLogin,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postPerPage, setPostPerPage] = useState(5);
@@ -150,25 +157,30 @@ const Data = ({
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
   const [byStatusData, setByStatusData] = useState([]);
   const [statusData, setStatusData] = useState("all");
+  const [loadingAction, setLoadingAction] = useState(false);
 
   useEffect(() => {
-    const filtered = dataWdFromDb.filter((item) => item.status != "pulled");
+    const filtered = dataHistoryDetails.filter(
+      (item) => item.status != "pulled"
+    );
     setByStatusData(filtered);
-  }, [dataWdFromDb]);
+  }, [dataHistoryDetails]);
 
   const handleFilterByStatus = (status) => {
     if (status === "all") {
-      const filtered = dataWdFromDb.filter((item) => item.status != "pulled");
+      const filtered = dataHistoryDetails.filter(
+        (item) => item.status != "pulled"
+      );
       setByStatusData(filtered);
       setStatusData(status);
       setCurrentPage(1);
-      setSelectedItems([]);
     } else {
-      const filtered = dataWdFromDb.filter((item) => item.status === status);
+      const filtered = dataHistoryDetails.filter(
+        (item) => item.status === status
+      );
       setByStatusData(filtered);
       setStatusData(status);
       setCurrentPage(1);
-      setSelectedItems([]);
     }
   };
 
@@ -176,6 +188,7 @@ const Data = ({
     const searchTermLower = searchTerm.toLowerCase();
 
     const fieldsToFilter = [
+      item.agent_name,
       item.member_username,
       item.account_name,
       item.bank_name,
@@ -216,7 +229,7 @@ const Data = ({
 
   const totalPages = Math.ceil(byStatusData.length / postPerPage);
 
-  const [maxPagesToShow] = useState(4);
+  const [maxPagesToShow] = useState(5);
 
   const getPageNumbers = () => {
     let pageNumbers = [];
@@ -320,6 +333,80 @@ const Data = ({
     setDataDetails(true);
   };
 
+  const cancelDataGrab = async (id) => {
+    setLoadingAction(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await Axios.put(`${apiUrl}/adminwd/cancelwd/${id}`);
+      if (response.data.success) {
+        getDataWdHistory();
+        setSelectedItems([]);
+      } else if (response.data.error) {
+        alert("Error from server!");
+        console.log(response.data.error);
+      } else {
+        console.log("Something error");
+      }
+      setLoadingAction(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const confirmDataGrab = async (id) => {
+    setLoadingAction(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await Axios.put(`${apiUrl}/adminwd/confirmwd/${id}`);
+      if (response.data.success) {
+        getDataWdHistory();
+        setSelectedItems([]);
+      } else if (response.data.error) {
+        alert("Error from server!");
+        console.log(response.data.error);
+      } else {
+        console.log("Something error");
+      }
+      setLoadingAction(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const rejectDataGrab = async (id) => {
+    setLoadingAction(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await Axios.put(`${apiUrl}/adminwd/rejectwd/${id}`);
+      if (response.data.success) {
+        getDataWdHistory();
+        setSelectedItems([]);
+      } else if (response.data.error) {
+        alert("Error from server!");
+        console.log(response.data.error);
+      } else {
+        console.log("Something error");
+      }
+      setLoadingAction(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dataCanUserProcess = dataHistoryDetails.filter(
+    (item) => item.admin_username === userLogin
+  );
+
+  // Mengambil semua nilai id dari data1
+  const idsInDataUserCanProcess = dataCanUserProcess.map(
+    (item) => item.data_wd_id
+  );
+
+  // Mengecek jika ada angka dalam selectedData yang tidak ada di data1
+  const invalidIds = selectedItems.filter(
+    (id) => !idsInDataUserCanProcess.includes(id)
+  );
+
   function getToday() {
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, "0");
@@ -358,58 +445,22 @@ const Data = ({
     }
   }
 
-  const handleClickPull = async (id) => {
-    try {
-      const response = await Axios.put(`${apiUrl}/operator/pullrequest/${id}`);
-      if (response.data.success) {
-        getOperatorAgentData();
-      } else if (response.data.error) {
-        alert("Data gagal di tarik!");
-        console.log(response.data.error);
-      } else {
-        alert("Data gagal di tarik!");
-        console.log("Something Error!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+
+    // Ambil tahun, bulan, dan hari (UTC)
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // getUTCMonth() dimulai dari 0
+    const day = String(date.getUTCDate()).padStart(2, "0");
+
+    // Ambil jam, menit, dan detik (UTC)
+    const hours = String(date.getUTCHours()).padStart(2, "0");
+    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
+    const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+
+    // Gabungkan menjadi format yang diinginkan
+    return `${day}-${month}-${year} | ${hours}:${minutes}:${seconds}`;
   };
-
-  const handlePullMultiple = async () => {
-    try {
-      const response = await Axios.put(
-        `${apiUrl}/operator/multiplepullrequest`,
-        {
-          selectedItems,
-        }
-      );
-      if (response.data.success) {
-        getOperatorAgentData();
-        setSelectedItems([]);
-      } else if (response.data.error) {
-        alert("Data gagal di tarik!");
-        console.log(response.data.error);
-      } else {
-        alert("Data gagal di tarik!");
-        console.log("Something Error!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const processRequest = dataWdFromDb.filter(
-    (item) => item.status != "reject" && item.status != "pulled"
-  );
-
-  const totalWithdraw = processRequest.reduce(
-    (total, item) => total + item.nominal,
-    0
-  );
-
-  function copyText(value) {
-    navigator.clipboard.writeText(value);
-  }
 
   return (
     <>
@@ -420,8 +471,16 @@ const Data = ({
           </div>
         ) : (
           <div className="relative overflow-x-auto shadow-md rounded-md">
-            <div className="flex-1 flex justify-start px-2 items-center">
+            <div className="flex justify-between px-2 items-center">
               <span className="text-sm kanit-medium">{today}</span>
+              <div>
+                <span className="kanit-regular">Closing Time : </span>
+                <span className="text-sm kanit-medium underline">
+                  {dataHistoryDetails.length < 1
+                    ? "time"
+                    : formatDate(dataHistoryDetails[0].closed_timestamp)}
+                </span>
+              </div>
             </div>
             <div className="flex flex-col md:flex-row px-2 py-1 justify-between items-center gap-2">
               <div className="flex-1">
@@ -449,28 +508,10 @@ const Data = ({
                   Success
                 </button>
                 <button
-                  className="w-24 flex justify-center items-center border p-1 rounded-md shadow-md bg-yellow-300"
-                  onClick={() => handleFilterByStatus("grab")}
-                >
-                  OnProcess
-                </button>
-                <button
-                  className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-orange-300"
-                  onClick={() => handleFilterByStatus("pending")}
-                >
-                  Pending
-                </button>
-                <button
                   className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-red-600 text-white"
                   onClick={() => handleFilterByStatus("reject")}
                 >
                   Reject
-                </button>
-                <button
-                  className="w-20 flex justify-center items-center border p-1 rounded-md shadow-md bg-red-300"
-                  onClick={() => handleFilterByStatus("pulled")}
-                >
-                  Pulled
                 </button>
               </div>
             </div>
@@ -540,11 +581,7 @@ const Data = ({
                   </th>
                   <th
                     scope="col"
-                    className={`px-3 py-3 kanit-medium cursor-pointer ${
-                      statusData === "pending" || statusData === "pulled"
-                        ? "hidden"
-                        : ""
-                    }`}
+                    className={`px-3 py-3 kanit-medium cursor-pointer`}
                     onClick={() => handleSort("admin_name")}
                   >
                     <div className="flex items-center">
@@ -592,32 +629,62 @@ const Data = ({
                     <td className="px-3 py-2 kanit-medium text-xl">
                       {rupiah.format(item.nominal)}
                     </td>
-                    <td
-                      className={`px-3 py-2 ${
-                        statusData === "pending" || statusData === "pulled"
-                          ? "hidden"
-                          : ""
-                      }`}
-                    >
+                    <td className={`px-3 py-2`}>
                       {item.admin_name === null ? "-" : item.admin_name}
                     </td>
                     <td className="px-3 py-2">
-                      <button
-                        className={`py-1 px-2 rounded-md bg-[#f82b2b] hover:bg-opacity-80 ${
-                          item.status != "pending" ? "hidden" : ""
-                        }`}
-                        title="Pull"
-                        onClick={() => {
-                          const confirm = window.confirm(
-                            "Yakin ingin menarik data ?"
-                          );
-                          if (confirm) {
-                            handleClickPull(item.data_wd_id);
-                          }
-                        }}
-                      >
-                        <FaUndoAlt className="text-zinc-100" />
-                      </button>
+                      {loadingAction ? (
+                        <BiLoaderCircle className="text-2xl animate-spin" />
+                      ) : (
+                        <div
+                          className={`flex justify-center gap-1 ${
+                            userLogin === item.admin_username ? "" : "hidden"
+                          }`}
+                        >
+                          <button
+                            className="py-1 px-2 rounded-md bg-[#602BF8] hover:bg-opacity-80"
+                            title="Confirm"
+                            onClick={() => {
+                              const confirm = window.confirm(
+                                "Withdraw sudah diproses ?"
+                              );
+                              if (confirm) {
+                                confirmDataGrab(item.data_wd_id);
+                              }
+                            }}
+                          >
+                            <GiConfirmed className="text-zinc-100" />
+                          </button>
+                          <button
+                            className="py-1 px-2 rounded-md bg-[#2bf83c] hover:bg-opacity-80"
+                            title="Cancel"
+                            onClick={() => {
+                              const confirm = window.confirm(
+                                "Yakin ingin cancel ?"
+                              );
+                              if (confirm) {
+                                cancelDataGrab(item.data_wd_id);
+                              }
+                            }}
+                          >
+                            <PiHandCoinsFill className="text-zinc-900" />
+                          </button>
+                          <button
+                            className="py-1 px-2 rounded-md bg-[#f82b2b] hover:bg-opacity-80"
+                            title="Reject"
+                            onClick={() => {
+                              const confirm = window.confirm(
+                                "Yakin ingin reject ?"
+                              );
+                              if (confirm) {
+                                rejectDataGrab(item.data_wd_id);
+                              }
+                            }}
+                          >
+                            <GiCancel className="text-zinc-100" />
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -636,19 +703,6 @@ const Data = ({
                 }`}</span>{" "}
                 dari <span className="">{filteredData.length}</span>
               </span>
-              <div
-                className="flex gap-1 items-center cursor-pointer active:opacity-60"
-                title="Copy Total"
-                onClick={() => copyText(totalWithdraw)}
-              >
-                <h1>
-                  Total Withdraw :{" "}
-                  <span className="kanit-medium text-2xl">
-                    {rupiah.format(totalWithdraw)}
-                  </span>
-                </h1>
-                <PiCopySimpleDuotone className="text-lg text-[#602BF8]" />
-              </div>
               <ul className="inline-flex gap-1 -space-x-px text-sm h-8">
                 <select
                   name="post-per-page"
@@ -663,6 +717,7 @@ const Data = ({
                   <option value="30">30 / page</option>
                   <option value="40">40 / page</option>
                   <option value="50">50 / page</option>
+                  <option value="100">100 / page</option>
                 </select>
                 <li>
                   <div
@@ -680,7 +735,9 @@ const Data = ({
                           ? "bg-[#602BF8] text-white"
                           : "bg-white text-gray-500"
                       }`}
-                      onClick={() => setCurrentPage(page)}
+                      onClick={() => {
+                        if (page !== "...") setCurrentPage(page);
+                      }}
                     >
                       {page}
                     </div>
@@ -698,31 +755,20 @@ const Data = ({
             </nav>
           </div>
         )}
-        <div className="p-2">
-          <button
-            className={`py-1 px-2 rounded-md bg-[#f82b2b] hover:bg-opacity-80 ${
-              statusData != "pending" ? "hidden" : ""
-            }`}
-            title="Pull"
-            onClick={() => {
-              const confirm = window.confirm(
-                "Yakin ingin menarik data yang dipilih ?"
-              );
-              if (confirm) {
-                handlePullMultiple();
-              }
-            }}
-          >
-            <FaUndoAlt className="text-zinc-100" />
-          </button>
-        </div>
       </div>
     </>
   );
 };
 
-const DataDetails = ({ setDataDetails, dataWdFromDb, idDetail, rupiah }) => {
-  const dataCheck = dataWdFromDb.find((item) => item.data_wd_id === idDetail);
+const DataDetails = ({
+  setDataDetails,
+  dataHistoryDetails,
+  idDetail,
+  rupiah,
+}) => {
+  const dataCheck = dataHistoryDetails.find(
+    (item) => item.data_wd_id === idDetail
+  );
 
   const formatDate = (isoString) => {
     const date = new Date(isoString);
@@ -743,10 +789,16 @@ const DataDetails = ({ setDataDetails, dataWdFromDb, idDetail, rupiah }) => {
 
   return (
     <>
-      {idDetail === undefined ? (
+      {idDetail === undefined || dataCheck === undefined ? (
         ""
       ) : (
         <div className="p-3 bg-white shadow-md border rounded-md flex flex-col justify-center items-center gap-1">
+          <div className="min-w-96 flex px-2 border-b">
+            <div className="flex-1 px-2 border-r">Agent</div>
+            <div className="flex-1 px-2 kanit-medium">
+              {dataCheck.agent_name}
+            </div>
+          </div>
           <div className="min-w-96 flex px-2 border-b">
             <div className="flex-1 px-2 border-r">Operator Input</div>
             <div className="flex-1 px-2">{dataCheck.operator_name}</div>

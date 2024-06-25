@@ -45,6 +45,7 @@ const LoginForm = ({ apiUrl }) => {
       if (response.data.success) {
         localStorage.setItem("tokenOperator", response.data.token);
         localStorage.setItem("userOperator", response.data.username);
+        localStorage.setItem("roleOperator", response.data.result[0].role);
         navigate("/");
       } else if (response.data.error) {
         setLoginMessage(response.data.error);

@@ -23,6 +23,7 @@ export default function Account() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const userLogin = localStorage.getItem("userOperator");
   const token = localStorage.getItem("tokenOperator");
+  const role = localStorage.getItem("roleOperator");
   const navigate = useNavigate();
 
   const [hideAddOperator, setHideAddOperator] = useState(true);
@@ -39,6 +40,13 @@ export default function Account() {
   useEffect(() => {
     if (!userLogin || !token) {
       navigate("/login");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (role != "administrator") {
+      alert("You can't access this page");
+      navigate("/");
     }
   }, []);
 
