@@ -45,7 +45,7 @@ export default function Account() {
   const getOperatorAgentData = async () => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await Axios.get(`${apiUrl}/operator/agent/${userLogin}`);
       if (response.data.success) {
         setFullname(response.data.result[0].fullname);
@@ -69,7 +69,7 @@ export default function Account() {
   const getAgent = async () => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       const response = await Axios.get(`${apiUrl}/agent`);
       if (response.data.success) {
         setAgentList(response.data.result);
@@ -88,7 +88,7 @@ export default function Account() {
     setLoading(true);
     setGetStatus("");
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const response = await Axios.get(`${apiUrl}/operator`);
 

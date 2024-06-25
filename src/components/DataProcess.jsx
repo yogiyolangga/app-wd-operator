@@ -159,10 +159,14 @@ const Data = ({
       const filtered = dataWdFromDb.filter((item) => item.status != "pulled");
       setByStatusData(filtered);
       setStatusData(status);
+      setCurrentPage(1);
+      setSelectedItems([]);
     } else {
       const filtered = dataWdFromDb.filter((item) => item.status === status);
       setByStatusData(filtered);
       setStatusData(status);
+      setCurrentPage(1);
+      setSelectedItems([]);
     }
   };
 
@@ -641,13 +645,7 @@ const Data = ({
   );
 };
 
-const DataDetails = ({
-  setDataDetails,
-  dataWdFromDb,
-  idDetail,
-  rupiah,
-  fullname,
-}) => {
+const DataDetails = ({ setDataDetails, dataWdFromDb, idDetail, rupiah }) => {
   const dataCheck = dataWdFromDb.find((item) => item.data_wd_id === idDetail);
 
   const formatDate = (isoString) => {
@@ -675,7 +673,7 @@ const DataDetails = ({
         <div className="p-3 bg-white shadow-md border rounded-md flex flex-col justify-center items-center gap-1">
           <div className="min-w-96 flex px-2 border-b">
             <div className="flex-1 px-2 border-r">Operator Input</div>
-            <div className="flex-1 px-2">{fullname}</div>
+            <div className="flex-1 px-2">{dataCheck.operator_name}</div>
           </div>
           <div className="min-w-96 flex px-2 border-b">
             <div className="flex-1 px-2 border-r">Username Member</div>
