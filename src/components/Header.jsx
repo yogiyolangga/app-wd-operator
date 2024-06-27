@@ -2,9 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { FaUserCircle } from "react-icons/fa";
 
-export default function Header({ fullname, agentName }) {
+export default function Header({ fullname, agentName, profilePic }) {
   const path = useLocation();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const role = localStorage.getItem("roleOperator");
 
@@ -48,17 +49,32 @@ export default function Header({ fullname, agentName }) {
           </a>
           <a
             href="/account"
-            className={`hover:underline ${role != "administrator" ? "hidden" : ""} ${
-              path.pathname.includes("account") ? "underline" : ""
-            }`}
+            className={`hover:underline ${
+              role != "administrator" ? "hidden" : ""
+            } ${path.pathname.includes("account") ? "underline" : ""}`}
           >
             user
           </a>
-          <span>{fullname}</span>
+          <a
+            href="/profile"
+            className={`flex items-center gap-1 hover:underline ${
+              path.pathname.includes("profile") ? "underline" : ""
+            }`}
+          >
+            <span>{fullname}</span>
+          </a>
           <div className="relative group cursor-pointer">
-            <FaUserCircle className="text-lg" />
+            {profilePic ? (
+              <img
+                src={`${apiUrl}/${profilePic}`}
+                alt="Profile"
+                className="w-[28px] h-[28px] rounded-full"
+              />
+            ) : (
+              <FaUserCircle className="text-[28px]" />
+            )}
             <span
-              className="absolute w-20 text-center p-1 bg-zinc-300 left-1/2 -translate-x-1/2 rounded-md top-5 kanit-medium cursor-pointer scale-0 group-hover:scale-100 text-zinc-700"
+              className="absolute w-20 text-center p-1 bg-zinc-300 left-1/2 -translate-x-1/2 rounded-md top-7 kanit-medium cursor-pointer scale-0 group-hover:scale-100 text-zinc-700"
               onClick={handleLogout}
             >
               Log out

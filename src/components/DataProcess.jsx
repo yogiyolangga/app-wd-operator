@@ -29,6 +29,7 @@ export default function DataProcess() {
 
   const [dataWdFromDb, setDataWdFromDb] = useState([]);
   const [agentName, setAgentName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
     if (!userLogin || !token) {
@@ -60,6 +61,7 @@ export default function DataProcess() {
         setFullname(response.data.result[0].fullname);
         getDataWdFromDb(response.data.result[0].agent_id);
         setAgentName(response.data.result[0].name);
+        setProfilePic(response.data.result[0].profile);
       } else if (response.data.error) {
         console.log(response.data.error);
       } else {
@@ -102,7 +104,11 @@ export default function DataProcess() {
   return (
     <>
       <div className="relative bg-white w-full max-w-[90%]  min-h-96 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
-        <Header fullname={fullname} agentName={agentName} />
+        <Header
+          fullname={fullname}
+          agentName={agentName}
+          profilePic={profilePic}
+        />
         <Sidebar />
         <div>
           <Data
@@ -127,6 +133,7 @@ export default function DataProcess() {
           idDetail={idDetail}
           rupiah={rupiah}
           fullname={fullname}
+          apiUrl={apiUrl}
         />
       </div>
     </>
@@ -721,7 +728,13 @@ const Data = ({
   );
 };
 
-const DataDetails = ({ setDataDetails, dataWdFromDb, idDetail, rupiah }) => {
+const DataDetails = ({
+  setDataDetails,
+  dataWdFromDb,
+  idDetail,
+  rupiah,
+  apiUrl,
+}) => {
   const dataCheck = dataWdFromDb.find((item) => item.data_wd_id === idDetail);
 
   const formatDate = (isoString) => {
@@ -794,9 +807,40 @@ const DataDetails = ({ setDataDetails, dataWdFromDb, idDetail, rupiah }) => {
             <div className="flex-1 px-2">{dataCheck.status}</div>
           </div>
           <div className="min-w-96 flex px-2 border-b">
-            <div className="flex-1 px-2 border-r">Admin</div>
+            <div className="flex-1 px-2 border-r">Bukti</div>
             <div className="flex-1 px-2">
-              {dataCheck.admin_name === null ? "-" : dataCheck.admin_name}
+              {dataCheck.evidence ? (
+                <a
+                  href={`${apiUrl}/${dataCheck.evidence}`}
+                  target="_blank"
+                  className="underline"
+                >
+                  lihat
+                </a>
+              ) : (
+                <span>Tidak Tersedia</span>
+              )}
+            </div>
+          </div>
+          <div className="min-w-96 flex px-2 border-b">
+            <div className="flex-1 flex items-center px-2 border-r">Admin</div>
+            <div className="flex-1 flex gap-2 items-center px-2">
+              <div>
+                {dataCheck.admin_name === null ? "-" : dataCheck.admin_name}
+              </div>
+              <div>
+                {dataCheck.profile ? (
+                  <a href={`${apiUrl}/${dataCheck.profile}`} target="_blank">
+                    <img
+                      src={`${apiUrl}/${dataCheck.profile}`}
+                      alt="Profile"
+                      className="w-14 h-14 rounded-full"
+                    />
+                  </a>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </div>
           <div className="w-full flex justify-center items-center py-2">

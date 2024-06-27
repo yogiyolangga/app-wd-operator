@@ -23,6 +23,7 @@ export default function Dashboard() {
   const [operatorId, setOperatorId] = useState("");
   const [agentId, setAgentId] = useState("");
   const [agentName, setAgentName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   const [dataWdFromDb, setDataWdFromDb] = useState([]);
 
@@ -56,6 +57,7 @@ export default function Dashboard() {
         setOperatorId(response.data.result[0].user_id);
         setAgentId(response.data.result[0].agent_id);
         setAgentName(response.data.result[0].name);
+        setProfilePic(response.data.result[0].profile);
         getDataWdFromDb(response.data.result[0].agent_id);
       } else if (response.data.error) {
         console.log(response.data.error);
@@ -77,7 +79,9 @@ export default function Dashboard() {
     (item) => item.status != "reject" && item.status != "pulled"
   );
 
-  const todayRequest = dataWdFromDb.filter((item) => item.status != "pulled");
+  const todayRequest = dataWdFromDb.filter(
+    (item) => item.status != "pulled" && item.status != "reject"
+  );
 
   const totalWithdraw = processRequest.reduce(
     (total, item) => total + item.nominal,
@@ -91,7 +95,11 @@ export default function Dashboard() {
   return (
     <>
       <div className="relative bg-white w-full max-w-[863px] lg:w-3/4 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
-        <Header fullname={fullname} agentName={agentName} />
+        <Header
+          fullname={fullname}
+          agentName={agentName}
+          profilePic={profilePic}
+        />
         <Sidebar />
         <Widget
           pendingRequest={pendingRequest}
@@ -234,7 +242,7 @@ const InputRequest = ({
   const [bank, setBank] = useState("");
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
-  const [nominal, setNominal] = useState("");
+  const [nominal, setNominal] = useState(0);
   const [lastBalance, setLastBalance] = useState("");
 
   const [inputStatus, setInputStatus] = useState("");
@@ -245,6 +253,10 @@ const InputRequest = ({
   useEffect(() => {
     if (dataWd && opProvider === "IDNTOTO") {
       handleOnChangeDataWdIdnToto();
+      setInputErrorMessage("");
+      setInputSuccessMessage("");
+    } else if (dataWd && opProvider === "IDNSPORT") {
+      handleOnChangeDataWdIdnSport();
       setInputErrorMessage("");
       setInputSuccessMessage("");
     }
@@ -287,6 +299,10 @@ const InputRequest = ({
     } catch (error) {
       console.error("Error parsing data: ", error);
     }
+  };
+
+  const handleOnChangeDataWdIdnSport = () => {
+    console.log("IDN SPORT");
   };
 
   // console.log("username", username);
@@ -445,7 +461,7 @@ const InputRequest = ({
                 id="nominal"
                 placeholder="Nominal"
                 className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
-                value={nominal != "" ? rupiah.format(nominal) : nominal}
+                value={nominal ? nominal : ""}
                 onChange={(e) => setNominal(e.target.value)}
               />
             </div>
@@ -458,9 +474,7 @@ const InputRequest = ({
                 id="last-balance"
                 placeholder="Sisa Saldo"
                 className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
-                value={
-                  lastBalance != "" ? rupiah.format(lastBalance) : lastBalance
-                }
+                value={lastBalance ? lastBalance : ""}
                 onChange={(e) => setLastBalance(e.target.value)}
               />
             </div>

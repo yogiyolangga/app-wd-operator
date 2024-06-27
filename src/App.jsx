@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import DataProcess from "./components/DataProcess";
 import History from "./components/History";
 import HistoryDetails from "./components/HistoryDetails";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/history" element={<History />} />
             <Route path="/history/:id" element={<HistoryDetails />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Router>
       </div>

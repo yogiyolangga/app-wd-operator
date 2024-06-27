@@ -36,6 +36,7 @@ export default function Account() {
 
   const [agentList, setAgentList] = useState([]);
   const [agentName, setAgentName] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   useEffect(() => {
     if (!userLogin || !token) {
@@ -58,6 +59,7 @@ export default function Account() {
       if (response.data.success) {
         setFullname(response.data.result[0].fullname);
         setAgentName(response.data.result[0].name);
+        setProfilePic(response.data.result[0].profile);
       } else if (response.data.error) {
         console.log(response.data.error);
       } else {
@@ -134,7 +136,11 @@ export default function Account() {
   return (
     <>
       <div className="relative bg-white w-full max-w-[863px] lg:w-3/4 min-h-96 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
-        <Header fullname={fullname} agentName={agentName} />
+        <Header
+          fullname={fullname}
+          agentName={agentName}
+          profilePic={profilePic}
+        />
         <Sidebar />
         <div
           className={`${
