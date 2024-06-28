@@ -243,7 +243,7 @@ const InputRequest = ({
   const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [nominal, setNominal] = useState(0);
-  const [lastBalance, setLastBalance] = useState("");
+  const [lastBalance, setLastBalance] = useState(0);
 
   const [inputStatus, setInputStatus] = useState("");
   const [inputSuccessMessage, setInputSuccessMessage] = useState("");
@@ -302,7 +302,42 @@ const InputRequest = ({
   };
 
   const handleOnChangeDataWdIdnSport = () => {
-    console.log("IDN SPORT");
+    const lines = dataWd
+      .trim()
+      .split("\t")
+      .map((line) => line.trim());
+
+    if (lines.length < 5 || lines > 5) {
+      setInputStatus("Format salah!");
+      return;
+    } else {
+      setInputStatus("");
+    }
+
+    try {
+      const username = lines[0];
+      const secondLineParts = lines[1].split(" ");
+      const bank = secondLineParts[0];
+      const accountNumber = secondLineParts[1].split("-").join("");
+      const accountName = secondLineParts.slice(2).join(" ");
+      const nominal = lines[2].replace(/,|\s+$/g, "");
+      const lastBalance = lines[3].replace(/,|\s+$/g, "");
+
+      const memberWdTime = lines[4];
+      const [date, timeOfDay] = memberWdTime.split(" ");
+      const [day, month, year] = date.split("/");
+      const formattedTime = `${year}-${month}-${day} ${timeOfDay}`;
+
+      setUsername(username);
+      setMemberWdTime(formattedTime);
+      setBank(bank);
+      setAccountName(accountName);
+      setAccountNumber(accountNumber);
+      setNominal(parseInt(nominal, 10));
+      setLastBalance(parseInt(lastBalance, 10));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // console.log("username", username);
@@ -461,7 +496,7 @@ const InputRequest = ({
                 id="nominal"
                 placeholder="Nominal"
                 className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
-                value={nominal ? nominal : ""}
+                value={nominal}
                 onChange={(e) => setNominal(e.target.value)}
               />
             </div>
@@ -474,7 +509,7 @@ const InputRequest = ({
                 id="last-balance"
                 placeholder="Sisa Saldo"
                 className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
-                value={lastBalance ? lastBalance : ""}
+                value={lastBalance}
                 onChange={(e) => setLastBalance(e.target.value)}
               />
             </div>
