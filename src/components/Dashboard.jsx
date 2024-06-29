@@ -94,7 +94,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="relative bg-white w-full max-w-[863px] lg:w-3/4 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
+      <div className="relative bg-white dark:bg-zinc-700 w-full max-w-[863px] lg:w-3/4 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
         <Header
           fullname={fullname}
           agentName={agentName}
@@ -153,74 +153,74 @@ const Widget = ({
           className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl"
         >
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular">TODAY REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">TODAY REQUEST</div>
             <div>
-              <MdToday className="w-[24px] h-[24px]" />
+              <MdToday className="w-[24px] h-[24px] dark:text-zinc-200" />
             </div>
           </div>
-          <div className="font-extrabold text-[40px] px-6">
+          <div className="font-extrabold text-[40px] px-6 dark:text-zinc-200">
             {todayRequest.length}
           </div>
           <hr className="w-full bg-[#DDDBE2] mt-3" />
           <div className="w-[188px] h-[7px] rounded-[31px] bg-[#C8C0DF] mx-auto mt-4">
-            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8]"></div>
+            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8] dark:bg-zinc-950"></div>
           </div>
           <div className="px-6">
-            <h1 className="text-[12px] font-bold text-black">
+            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">
               Process Average
             </h1>
           </div>
         </a>
         <div className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl">
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular">PENDING REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">PENDING REQUEST</div>
             <div>
-              <MdOutlinePendingActions className="w-[24px] h-[24px]" />
+              <MdOutlinePendingActions className="w-[24px] h-[24px] dark:text-zinc-200" />
             </div>
           </div>
-          <div className="font-extrabold text-[40px] px-6">
+          <div className="font-extrabold text-[40px] px-6 dark:text-zinc-200">
             {pendingRequest.length}
           </div>
           <hr className="w-full bg-[#DDDBE2] mt-3" />
           <div className="w-[188px] h-[7px] rounded-[31px] bg-[#C8C0DF] mx-auto mt-4">
-            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8]"></div>
+            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8] dark:bg-zinc-950"></div>
           </div>
           <div className="px-6">
-            <h1 className="text-[12px] font-bold text-black">Last Min Queue</h1>
+            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">Last Min Queue</h1>
           </div>
         </div>
         <div className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl">
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular">REJECT REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">REJECT REQUEST</div>
             <div>
-              <BsSignDoNotEnterFill className="w-[24px] h-[24px] text-black" />
+              <BsSignDoNotEnterFill className="w-[24px] h-[24px] text-black dark:text-zinc-200" />
             </div>
           </div>
-          <div className="font-extrabold text-[40px] px-6">
+          <div className="font-extrabold text-[40px] px-6 dark:text-zinc-200">
             {rejectRequest.length}
           </div>
           <hr className="w-full bg-[#DDDBE2] mt-3" />
           <div className="w-[188px] h-[7px] rounded-[31px] bg-[#C8C0DF] mx-auto mt-4">
-            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8]"></div>
+            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8] dark:bg-zinc-950"></div>
           </div>
           <div className="px-6">
-            <h1 className="text-[12px] font-bold text-black">Response Rate</h1>
+            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">Response Rate</h1>
           </div>
         </div>
       </div>
       <div className="relative w-full px-6 flex justify-end items-center gap-3 border-b">
-        <h1 className="kanit-medium text-lg">Total :</h1>
+        <h1 className="kanit-medium text-lg dark:text-zinc-200">Total :</h1>
         <div
-          className="flex gap-1 items-center cursor-pointer"
+          className="flex gap-1 items-center cursor-pointer dark:text-zinc-200"
           onClick={() => copyText(totalWithdraw)}
         >
           <h1 className="text-xl kanit-medium cursor-pointer">
             {rupiah.format(totalWithdraw)}
           </h1>
-          <PiCopySimpleFill className="text-lg cursor-pointer text-[#602BF8]" />
+          <PiCopySimpleFill className="text-lg cursor-pointer text-[#602BF8] dark:text-zinc-200" />
         </div>
         <span
-          className={`text-sm absolute font-semibold text-zinc-600 duration-200 ${copiedTextStyle}`}
+          className={`text-sm absolute font-semibold text-zinc-600 dark:text-zinc-200  duration-200 ${copiedTextStyle}`}
         >
           Data Copied
         </span>
@@ -403,17 +403,17 @@ const InputRequest = ({
     <>
       <div className="px-6">
         <div className="w-full flex justify-between px-3 pb-2">
-          <h1 className="kanit-medium">Paste Disini</h1>
-          <h1 className="kanit-medium">Split Result</h1>
+          <h1 className="kanit-medium dark:text-zinc-200">Paste Disini</h1>
+          <h1 className="kanit-medium dark:text-zinc-200">Split Result</h1>
         </div>
-        <div className="flex justify-between gap-2 min-h-64">
+        <div className="flex justify-between gap-2 min-h-64 dark:text-zinc-200">
           <div className="w-1/3 flex flex-col">
             <span className="text-sm text-red-500 px-2">{inputStatus}</span>
             <textarea
               name="data-wd"
               id="data-wd"
               placeholder="Paste Disini..."
-              className="border rounded-md outline-none w-full text-sm min-h-72 p-2"
+              className="border rounded-md outline-none w-full text-sm min-h-72 p-2 dark:bg-zinc-600 dark:text-zinc-50"
               value={dataWd}
               onChange={(e) => setDataWd(e.target.value)}
             ></textarea>
@@ -430,7 +430,7 @@ const InputRequest = ({
                 type="text"
                 id="username"
                 placeholder="Username"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -443,7 +443,7 @@ const InputRequest = ({
                 type="text"
                 id="wdtime"
                 placeholder="Date Time"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={memberWdTime}
                 onChange={(e) => setMemberWdTime(e.target.value)}
               />
@@ -456,7 +456,7 @@ const InputRequest = ({
                 type="text"
                 id="bank"
                 placeholder="Bank"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={bank}
                 onChange={(e) => setBank(e.target.value)}
               />
@@ -469,7 +469,7 @@ const InputRequest = ({
                 type="text"
                 id="account-number"
                 placeholder="Nomor Rekening"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
               />
@@ -482,7 +482,7 @@ const InputRequest = ({
                 type="text"
                 id="account-name"
                 placeholder="Nama Rekening"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={accountName}
                 onChange={(e) => setAccountName(e.target.value)}
               />
@@ -495,7 +495,7 @@ const InputRequest = ({
                 type="text"
                 id="nominal"
                 placeholder="Nominal"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={nominal}
                 onChange={(e) => setNominal(e.target.value)}
               />
@@ -508,7 +508,7 @@ const InputRequest = ({
                 type="text"
                 id="last-balance"
                 placeholder="Sisa Saldo"
-                className="border-2 rounded-md flex-1 p-1 text-sm outline-none"
+                className="border-2 rounded-md flex-1 p-1 text-sm outline-none dark:bg-zinc-600"
                 value={lastBalance}
                 onChange={(e) => setLastBalance(e.target.value)}
               />
@@ -522,7 +522,7 @@ const InputRequest = ({
             <div className="w-full flex justify-center gap-2">
               <button
                 type="submit"
-                className="w-20 h-8 py-1 rounded-md bg-[#602BF8] text-white flex justify-center items-center"
+                className="w-20 h-8 py-1 rounded-md bg-[#602BF8] dark:bg-zinc-950 text-white flex justify-center items-center"
               >
                 {loading ? (
                   <AiOutlineLoading3Quarters className="animate-spin text-lg" />

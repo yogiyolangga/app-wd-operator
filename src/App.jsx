@@ -10,7 +10,7 @@ import Profile from "./components/Profile";
 function App() {
   return (
     <>
-      <div className="w-full min-h-screen p-5 flex justify-center items-center bg-[#DBE8F4]">
+      <div className="w-full min-h-screen p-5 flex justify-center items-center bg-[#DBE8F4] dark:bg-[#2a2a2b]">
         <Router>
           <Routes>
             <Route path="/" element={<Dashboard />} />

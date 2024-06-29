@@ -21,7 +21,7 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-[55px] h-[300px] rounded-[47px] bg-[#602BF8] drop-shadow-md flex flex-col items-center justify-evenly">
+      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-[55px] h-[300px] rounded-[47px] bg-[#602BF8] dark:bg-zinc-950 drop-shadow-md flex flex-col items-center justify-evenly">
         <a href="/" title="Home">
           <BiSolidHome
             className={`w-[24px] h-[24px] hover:text-white ${

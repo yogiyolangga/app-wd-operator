@@ -135,7 +135,7 @@ export default function Account() {
 
   return (
     <>
-      <div className="relative bg-white w-full max-w-[863px] lg:w-3/4 min-h-96 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
+      <div className="relative bg-white dark:bg-zinc-700 dark:text-zinc-50 w-full max-w-[863px] lg:w-3/4 min-h-96 rounded-[18px] flex flex-col gap-6 p-8 pb-14">
         <Header
           fullname={fullname}
           agentName={agentName}
@@ -260,11 +260,11 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
             Nama Lengkap
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <RiAccountPinCircleFill className="w-[24px] h-[24px] text-zinc-700" />
+            <RiAccountPinCircleFill className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type="text"
               id="fullname"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="Nama Lengkap"
               value={fullname}
               onChange={(e) => {
@@ -278,11 +278,11 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
             Username
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <FaRegCircleUser className="w-[24px] h-[24px] text-zinc-700" />
+            <FaRegCircleUser className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type="text"
               id="username"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="Username"
               value={username}
               onChange={(e) => {
@@ -296,11 +296,11 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
             Password
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <RiLockPasswordFill className="w-[24px] h-[24px] text-zinc-700" />
+            <RiLockPasswordFill className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type={passwordType}
               id="password"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="Password"
               value={password}
               onChange={(e) => {
@@ -308,13 +308,13 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
               }}
             />
             <GoEyeClosed
-              className={`w-[24px] h-[24px] text-zinc-700 cursor-pointer ${
+              className={`w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50 cursor-pointer ${
                 passwordType === "password" ? "" : "hidden"
               }`}
               onClick={() => setPasswordType("text")}
             />
             <GoEye
-              className={`w-[24px] h-[24px] text-zinc-700 cursor-pointer ${
+              className={`w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50 cursor-pointer ${
                 passwordType === "text" ? "" : "hidden"
               }`}
               onClick={() => setPasswordType("password")}
@@ -326,19 +326,19 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
             Agent
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <CgWebsite className="w-[24px] h-[24px] text-zinc-700" />
+            <CgWebsite className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <select
               name="agent"
               id="agent"
-              className="outline-none flex-1"
+              className="outline-none dark:bg-transparent flex-1"
               value={agent}
               onChange={(e) => {
                 setAgent(e.target.value);
               }}
             >
-              <option value="">Pilih Agent</option>
+              <option className="dark:bg-zinc-600" value="">Pilih Agent</option>
               {agentList.map((item, index) => (
-                <option key={index} value={item.agent_id}>
+                <option className="dark:bg-zinc-600" key={index} value={item.agent_id}>
                   {item.name}
                 </option>
               ))}
@@ -350,20 +350,20 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
             Role
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <FaUserFriends className="w-[24px] h-[24px] text-zinc-700" />
+            <FaUserFriends className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <select
               name="role"
               id="role"
-              className="outline-none flex-1"
+              className="outline-none dark:bg-transparent flex-1"
               value={role}
               onChange={(e) => {
                 setRole(e.target.value);
               }}
             >
-              <option value="">Pilih Role</option>
-              <option value="administrator">Administrator</option>
-              <option value="moderator">Moderator</option>
-              <option value="staff">Staff</option>
+              <option className="dark:bg-zinc-600" value="">Pilih Role</option>
+              <option className="dark:bg-zinc-600" value="administrator">Administrator</option>
+              <option className="dark:bg-zinc-600" value="moderator">Moderator</option>
+              <option className="dark:bg-zinc-600" value="staff">Staff</option>
             </select>
           </div>
         </div>
@@ -373,7 +373,7 @@ const AddOperator = ({ apiUrl, getOperator, getAgent, agentList }) => {
         <div className="w-1/2">
           <button
             type="submit"
-            className="w-full rounded-full flex justify-center items-center text-white bg-gradient-to-tl from-[#00E1FD] to-[#602BF8] h-10 hover:opacity-70"
+            className="w-full rounded-full flex justify-center items-center text-white bg-gradient-to-tl from-[#00E1FD] to-[#602BF8] h-10 hover:opacity-70 dark:from-zinc-900 dark:to-zinc-500"
           >
             {loading === true ? (
               <AiOutlineLoading3Quarters className="animate-spin text-lg" />
@@ -528,7 +528,7 @@ const Operators = ({
               <input
                 type="text"
                 placeholder="Cari Nama..."
-                className="border p-1 rounded-md outline-none"
+                className="border p-1 rounded-md outline-none dark:bg-zinc-600"
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -688,17 +688,17 @@ const EditOperator = ({
 
   return (
     <>
-      <div className="p-3 bg-white shadow-md border rounded-md flex flex-col justify-center items-center gap-1">
+      <div className="p-3 bg-white dark:bg-zinc-700 dark:text-zinc-50 shadow-md border rounded-md flex flex-col justify-center items-center gap-1">
         <div className="">
           <label htmlFor="edit-fullname" className="text-sm pl-2">
             Nama Lengkap
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <RiAccountPinCircleFill className="w-[24px] h-[24px] text-zinc-700" />
+            <RiAccountPinCircleFill className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type="text"
               id="edit-fullname"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="Nama Lengkap"
               value={newFullname}
               onChange={(e) => {
@@ -712,11 +712,11 @@ const EditOperator = ({
             Username
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <FaRegCircleUser className="w-[24px] h-[24px] text-zinc-700" />
+            <FaRegCircleUser className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type="text"
               id="edit-username"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="Username"
               value={newUsername}
               onChange={(e) => {
@@ -730,11 +730,11 @@ const EditOperator = ({
             Password
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <RiLockPasswordFill className="w-[24px] h-[24px] text-zinc-700" />
+            <RiLockPasswordFill className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <input
               type={passwordType}
               id="edit-password"
-              className="flex-1 h-full rounded-md outline-none"
+              className="flex-1 h-full rounded-md outline-none dark:bg-transparent"
               placeholder="New Password"
               value={newPass}
               onChange={(e) => {
@@ -742,13 +742,13 @@ const EditOperator = ({
               }}
             />
             <GoEyeClosed
-              className={`w-[24px] h-[24px] text-zinc-700 cursor-pointer ${
+              className={`w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50 cursor-pointer ${
                 passwordType === "password" ? "" : "hidden"
               }`}
               onClick={() => setPasswordType("text")}
             />
             <GoEye
-              className={`w-[24px] h-[24px] text-zinc-700 cursor-pointer ${
+              className={`w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50 cursor-pointer ${
                 passwordType === "text" ? "" : "hidden"
               }`}
               onClick={() => setPasswordType("password")}
@@ -760,19 +760,19 @@ const EditOperator = ({
             Agent
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <CgWebsite className="w-[24px] h-[24px] text-zinc-700" />
+            <CgWebsite className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <select
               name="agent"
               id="agent"
-              className="outline-none flex-1"
+              className="outline-none flex-1 dark:bg-transparent"
               value={newAgent}
               onChange={(e) => {
                 setNewAgent(e.target.value);
               }}
             >
-              <option value="">Pilih Agent</option>
+              <option className="dark:bg-zinc-600" value="">Pilih Agent</option>
               {agentList.map((item, index) => (
-                <option key={index} value={item.agent_id}>
+                <option className="dark:bg-zinc-600" key={index} value={item.agent_id}>
                   {item.name}
                 </option>
               ))}
@@ -784,20 +784,20 @@ const EditOperator = ({
             Role
           </label>
           <div className="min-w-64 h-10 flex justify-between items-center gap-2 rounded-full border px-2">
-            <FaUserFriends className="w-[24px] h-[24px] text-zinc-700" />
+            <FaUserFriends className="w-[24px] h-[24px] text-zinc-700 dark:text-zinc-50" />
             <select
               name="role"
               id="role"
-              className="outline-none flex-1"
+              className="outline-none flex-1 dark:bg-transparent"
               value={newRole}
               onChange={(e) => {
                 setnewRole(e.target.value);
               }}
             >
-              <option value="">Pilih Role</option>
-              <option value="administrator">Administrator</option>
-              <option value="moderator">Moderator</option>
-              <option value="staff">Staff</option>
+              <option className="dark:bg-zinc-600" value="">Pilih Role</option>
+              <option className="dark:bg-zinc-600" value="administrator">Administrator</option>
+              <option className="dark:bg-zinc-600" value="moderator">Moderator</option>
+              <option className="dark:bg-zinc-600" value="staff">Staff</option>
             </select>
           </div>
         </div>

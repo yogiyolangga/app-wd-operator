@@ -1,8 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import { FaUserCircle } from "react-icons/fa";
+import { FaRegLightbulb } from "react-icons/fa";
 
 export default function Header({ fullname, agentName, profilePic }) {
+  const [theme, setTheme] = useState(null);
   const path = useLocation();
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -15,17 +18,55 @@ export default function Header({ fullname, agentName, profilePic }) {
     localStorage.removeItem("roleOperator");
     navigate("/login");
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("theme") === "dark") {
+      setTheme("dark");
+    } else if (localStorage.getItem("theme") === "light") {
+      setTheme("light");
+    } else if (window.matchMedia("(prefers-color-scheme : dark)").matches) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleThemeSwitch = () => {
+    if (theme === "dark") {
+      setTheme("light");
+      localStorage.setItem("theme", "light");
+    } else {
+      setTheme("dark");
+      localStorage.setItem("theme", "dark");
+    }
+  };
   return (
     <>
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <h1 className="font-bold text-[21px]">Dashboard</h1>
-          <h1 className="font-bold text-[21px]">{agentName}</h1>
+          <div
+            className="py-0.5 px-1 w-[50px] bg-zinc-200 rounded-xl cursor-pointer border-2 border-black group"
+            onClick={handleThemeSwitch}
+          >
+            <div className="w-[20px] h-[20px] flex justify-center items-center rounded-full border-2 border-black bg-yellow-400 dark:bg-zinc-600 dark:translate-x-full duration-300 group-hover:scale-105">
+              <FaRegLightbulb className="text-sm" />
+            </div>
+          </div>
+          <h1 className="font-bold text-[21px] dark:text-zinc-200">Dashboard</h1>
+          <h1 className="font-bold text-[21px] dark:text-zinc-200">{agentName}</h1>
         </div>
         <div className="flex items-center gap-3">
           <a
             href="/"
-            className={`hover:underline ${
+            className={`dark:text-zinc-200 hover:underline ${
               path.pathname === "/" ? "underline" : ""
             }`}
           >
@@ -33,7 +74,7 @@ export default function Header({ fullname, agentName, profilePic }) {
           </a>
           <a
             href="/data-process"
-            className={`hover:underline ${
+            className={`dark:text-zinc-200 hover:underline ${
               path.pathname.includes("data-process") ? "underline" : ""
             }`}
           >
@@ -41,7 +82,7 @@ export default function Header({ fullname, agentName, profilePic }) {
           </a>
           <a
             href="/history"
-            className={`hover:underline ${
+            className={`dark:text-zinc-200 hover:underline ${
               path.pathname.includes("history") ? "underline" : ""
             }`}
           >
@@ -49,7 +90,7 @@ export default function Header({ fullname, agentName, profilePic }) {
           </a>
           <a
             href="/account"
-            className={`hover:underline ${
+            className={`dark:text-zinc-200 hover:underline ${
               role != "administrator" ? "hidden" : ""
             } ${path.pathname.includes("account") ? "underline" : ""}`}
           >
@@ -57,7 +98,7 @@ export default function Header({ fullname, agentName, profilePic }) {
           </a>
           <a
             href="/profile"
-            className={`flex items-center gap-1 hover:underline ${
+            className={`flex items-center gap-1 dark:text-zinc-200 hover:underline ${
               path.pathname.includes("profile") ? "underline" : ""
             }`}
           >
