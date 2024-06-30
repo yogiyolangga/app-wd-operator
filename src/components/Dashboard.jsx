@@ -307,7 +307,7 @@ const InputRequest = ({
       .split("\t")
       .map((line) => line.trim());
 
-    if (lines.length < 5 || lines > 5) {
+    if (lines.length != 5) {
       setInputStatus("Format salah!");
       return;
     } else {

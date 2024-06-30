@@ -53,7 +53,7 @@ export default function Header({ fullname, agentName, profilePic }) {
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
           <div
-            className="py-0.5 px-1 w-[50px] bg-zinc-200 rounded-xl cursor-pointer border-2 border-black group"
+            className="py-0.5 px-1 w-[50px] bg-zinc-200 rounded-xl cursor-pointer border-2 border-black dark:border-zinc-100 dark:bg-zinc-600 group"
             onClick={handleThemeSwitch}
           >
             <div className="w-[20px] h-[20px] flex justify-center items-center rounded-full border-2 border-black bg-yellow-400 dark:bg-zinc-600 dark:translate-x-full duration-300 group-hover:scale-105">
