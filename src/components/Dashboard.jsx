@@ -3,6 +3,7 @@ import { Sidebar } from "./Sidebar";
 
 import { useEffect, useState } from "react";
 import Axios from "axios";
+import ClipboardJS from "clipboard";
 
 import { BsSignDoNotEnterFill } from "react-icons/bs";
 import { MdToday } from "react-icons/md";
@@ -138,12 +139,51 @@ const Widget = ({
   });
 
   function copyText(value) {
-    navigator.clipboard.writeText(value);
+    const dummyButton = document.createElement("button");
+    dummyButton.setAttribute("data-clipboard-text", value);
+    document.body.appendChild(dummyButton);
+
+    const clipboard = new ClipboardJS(dummyButton);
+
+    clipboard.on("success", () => {
+      console.log("Text copied to clipboard");
+      document.body.removeChild(dummyButton);
+      clipboard.destroy();
+    });
+
+    clipboard.on("error", (err) => {
+      console.error("Failed to copy text: ", err);
+      document.body.removeChild(dummyButton);
+      clipboard.destroy();
+    });
+
+    dummyButton.click();
     setCopiedTextStyle("opacity-100 scale-100 -top-4");
     setTimeout(() => {
       setCopiedTextStyle("opacity-5 scale-0 -top-0");
     }, 2000);
   }
+
+  const [barWidthPending, setBarWidthPending] = useState("2");
+  const totalDuration = 5 * 60 * 1000; // 10 minutes in milliseconds
+
+  useEffect(() => {
+    const startTime =
+      pendingRequest.length > 0 ? pendingRequest[0].input_date : "";
+    const startTimestamp = new Date(startTime).getTime();
+    const interval = setInterval(() => {
+      const currentTimestamp = new Date().getTime();
+      const elapsedTime = currentTimestamp - startTimestamp;
+      const progress = Math.min((elapsedTime / totalDuration) * 100, 100);
+      setBarWidthPending(progress);
+
+      if (progress >= 100) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [pendingRequest, totalDuration]);
 
   return (
     <>
@@ -153,7 +193,9 @@ const Widget = ({
           className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl"
         >
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular dark:text-zinc-200">TODAY REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">
+              TODAY REQUEST
+            </div>
             <div>
               <MdToday className="w-[24px] h-[24px] dark:text-zinc-200" />
             </div>
@@ -173,7 +215,9 @@ const Widget = ({
         </a>
         <div className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl">
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular dark:text-zinc-200">PENDING REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">
+              PENDING REQUEST
+            </div>
             <div>
               <MdOutlinePendingActions className="w-[24px] h-[24px] dark:text-zinc-200" />
             </div>
@@ -183,15 +227,26 @@ const Widget = ({
           </div>
           <hr className="w-full bg-[#DDDBE2] mt-3" />
           <div className="w-[188px] h-[7px] rounded-[31px] bg-[#C8C0DF] mx-auto mt-4">
-            <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8] dark:bg-zinc-950"></div>
+            <div
+              style={{
+                width: `${barWidthPending < 101 ? barWidthPending : "0"}%`,
+              }}
+              className={`h-[7px] rounded-[31px] ${
+                barWidthPending > "80" ? "bg-[#f82b2b]" : "bg-[#602BF8]"
+              } duration-100`}
+            ></div>
           </div>
           <div className="px-6">
-            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">Last Min Queue</h1>
+            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">
+              waiting time
+            </h1>
           </div>
         </div>
         <div className="w-[238px] h-[174px] py-6 rounded-[14px] shadow-2xl">
           <div className="flex justify-between px-6 items-center">
-            <div className="text-[14px] kanit-regular dark:text-zinc-200">REJECT REQUEST</div>
+            <div className="text-[14px] kanit-regular dark:text-zinc-200">
+              REJECT REQUEST
+            </div>
             <div>
               <BsSignDoNotEnterFill className="w-[24px] h-[24px] text-black dark:text-zinc-200" />
             </div>
@@ -204,7 +259,9 @@ const Widget = ({
             <div className="w-[133px] h-[7px] rounded-[31px] bg-[#602BF8] dark:bg-zinc-950"></div>
           </div>
           <div className="px-6">
-            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">Response Rate</h1>
+            <h1 className="text-[12px] font-bold text-black dark:text-zinc-200">
+              Response Rate
+            </h1>
           </div>
         </div>
       </div>

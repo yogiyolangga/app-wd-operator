@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import { Sidebar } from "./Sidebar";
 import Loading from "./Loading";
+import moment from 'moment-timezone';
 
 import {
   TbPlayerTrackNextFilled,
@@ -120,6 +121,8 @@ const Data = ({ loading, dataHistory }) => {
   const [postPerPage, setPostPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "asc" });
+
+  console.log(dataHistory);
 
   const filteredData = dataHistory.filter((item) => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -252,18 +255,20 @@ const Data = ({ loading, dataHistory }) => {
 
   const today = getToday();
 
-  const formatDate = (isoString) => {
-    const date = new Date(isoString);
+  // Fungsi untuk memformat tanggal dengan zona waktu Jakarta
+  const formatDate = (dbTimeString) => {
+    // Buat objek moment dari string waktu database dan atur ke zona waktu Jakarta
+    const date = moment.tz(dbTimeString, "Asia/Jakarta");
 
-    // Ambil tahun, bulan, dan hari (UTC)
-    const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // getUTCMonth() dimulai dari 0
-    const day = String(date.getUTCDate()).padStart(2, "0");
+    // Ambil tahun, bulan, dan hari di zona waktu Jakarta
+    const year = date.year();
+    const month = String(date.month() + 1).padStart(2, "0"); // month() dimulai dari 0
+    const day = String(date.date()).padStart(2, "0");
 
-    // Ambil jam, menit, dan detik (UTC)
-    const hours = String(date.getUTCHours()).padStart(2, "0");
-    const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-    const seconds = String(date.getUTCSeconds()).padStart(2, "0");
+    // Ambil jam, menit, dan detik di zona waktu Jakarta
+    const hours = String(date.hour()).padStart(2, "0");
+    const minutes = String(date.minute()).padStart(2, "0");
+    const seconds = String(date.second()).padStart(2, "0");
 
     // Gabungkan menjadi format yang diinginkan
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
